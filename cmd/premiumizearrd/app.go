@@ -28,7 +28,7 @@ func (app *App) Start(logLevel string, configFile string, loggingDirectory strin
 	//Setup static login
 	lvl, err := log.ParseLevel(logLevel)
 	if err != nil {
-		log.Errorf("Error flag not recognized, defaulting to Info!!", err)
+		log.Errorf("logLevel Flag not recognized. Setting Log Level to INFO: %s", err)
 		lvl = log.InfoLevel
 	}
 	log.SetLevel(lvl)

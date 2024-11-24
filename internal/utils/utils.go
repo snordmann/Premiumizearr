@@ -91,7 +91,7 @@ func StringInSlice(a string, list []string) int {
 	return -1
 }
 
-func GetDownloadsFolderIDFromPremiumizeme(premiumizemeClient *premiumizeme.Premiumizeme) string {
+func GetDownloadsFolderIDFromPremiumizeme(premiumizemeClient *premiumizeme.Premiumizeme, folderName string) string {
 	var downloadsFolderID string
 	folders, err := premiumizemeClient.GetFolders()
 	if err != nil {
@@ -99,8 +99,6 @@ func GetDownloadsFolderIDFromPremiumizeme(premiumizemeClient *premiumizeme.Premi
 		log.Errorf("Cannot read folders from premiumize.me, application will not run!")
 		return ""
 	}
-
-	const folderName = "arrDownloads"
 
 	for _, folder := range folders {
 		if folder.Name == folderName {
@@ -143,18 +141,18 @@ func IsRunningInDockerContainer() bool {
 
 func IsDirectoryWriteable(path string) bool {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		log.Errorf("Directory does not exist: ", path)
+		log.Errorf("Directory does not exist: %s", path)
 		return false
 	}
 
 	if _, err := os.Create(path + "/test.txt"); err != nil {
-		log.Errorf("Cannot write test.txt to directory: ", path)
+		log.Errorf("Cannot write test.txt to directory: %s", path)
 		return false
 	}
 
 	// Delete test file
 	if err := os.Remove(path + "/test.txt"); err != nil {
-		log.Errorf("Cannot delete test.txt file in: ", path)
+		log.Errorf("Cannot delete test.txt file in: %s", path)
 		return false
 	}
 

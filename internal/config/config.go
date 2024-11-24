@@ -133,6 +133,12 @@ func loadConfigFromDisk(altConfigLocation string) (Config, error) {
 		updated = true
 	}
 
+	if configInterface["PremiumizemeFolderName"] == nil {
+		log.Info("PremiumizemeFolderName not set, setting to arrDownloads")
+		config.PremiumizemeFolderName = "arrDownloads"
+		updated = true
+	}
+
 	config.altConfigLocation = altConfigLocation
 
 	if updated {
@@ -170,6 +176,7 @@ func defaultConfig() Config {
 		WebRoot:                         "",
 		SimultaneousDownloads:           5,
 		ArrHistoryUpdateIntervalSeconds: 20,
+		PremiumizemeFolderName:          "arrDownloads",
 	}
 }
 

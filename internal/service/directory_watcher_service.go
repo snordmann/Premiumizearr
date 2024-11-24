@@ -66,7 +66,7 @@ func (dw *DirectoryWatcherService) GetStatus() string {
 func (dw *DirectoryWatcherService) Start() {
 	log.Info("Starting directory watcher...")
 
-	dw.downloadsFolderID = utils.GetDownloadsFolderIDFromPremiumizeme(dw.premiumizemeClient)
+	dw.downloadsFolderID = utils.GetDownloadsFolderIDFromPremiumizeme(dw.premiumizemeClient, dw.config.PremiumizemeFolderName)
 
 	log.Info("Creating Queue...")
 	dw.Queue = stringqueue.NewStringQueue()
@@ -182,11 +182,11 @@ func (dw *DirectoryWatcherService) processUploads() {
 					log.Trace("File already uploaded, removing from Disk")
 					os.Remove(filePath)
 				default:
-					log.Error("Error creating transfer: %s", err)
+					log.Errorf("Error creating transfer: %s", err)
 				}
 			} else {
 				dw.status = "Okay"
-				os.Remove(filePath)
+				err := os.Remove(filePath)
 				if err != nil {
 					log.Errorf("Error could not delete %s Error: %+v", filePath, err)
 				}
@@ -194,7 +194,7 @@ func (dw *DirectoryWatcherService) processUploads() {
 			}
 			time.Sleep(time.Second * time.Duration(sleepTimeSeconds))
 		} else {
-			log.Errorf("Received %s from blackhole Queue. Appears to be an empty path.")
+			log.Errorf("Received filePath from blackhole Queue appears to be an empty path.")
 		}
 	}
 }

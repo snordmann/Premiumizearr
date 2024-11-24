@@ -32,6 +32,7 @@
     WebRoot: "",
     SimultaneousDownloads: 0,
     Arrs: [],
+    PremiumizemeFolderName: "",
   };
   const ERR_SAVE = "Error Saving Config";
   const ERR_TEST = "Error Testing *arr client";
@@ -263,6 +264,11 @@
           labelText="API Key"
           bind:value={config.PremiumizemeAPIKey}
         />
+        <TextInput
+        disabled={inputDisabled}
+        labelText="Premiumize Folder Name"
+        bind:value={config.PremiumizemeFolderName}
+      />
       </FormGroup>
       <h4>Directory Settings</h4>
       <FormGroup>

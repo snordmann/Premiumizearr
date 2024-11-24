@@ -79,7 +79,7 @@ func (manager *TransferManagerService) ConfigUpdatedCallback(currentConfig confi
 }
 
 func (manager *TransferManagerService) Run(interval time.Duration) {
-	manager.downloadsFolderID = utils.GetDownloadsFolderIDFromPremiumizeme(manager.premiumizemeClient)
+	manager.downloadsFolderID = utils.GetDownloadsFolderIDFromPremiumizeme(manager.premiumizemeClient, manager.config.PremiumizemeFolderName)
 	for {
 		manager.runningTask = true
 		manager.TaskUpdateTransfersList()
@@ -219,7 +219,7 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 			return
 		}
 		if err != nil {
-			log.Error("Error generating download link: %s", err)
+			log.Errorf("Error generating download link: %s", err)
 			manager.removeDownload(item.Name)
 			return
 		}
@@ -271,7 +271,7 @@ func (manager *TransferManagerService) HandleFinishedItem(item premiumizeme.Item
 		err = manager.premiumizemeClient.DeleteFolder(item.ID)
 		if err != nil {
 			manager.removeDownload(item.Name)
-			log.Error("Error deleting folder on premiumize.me: %s", err)
+			log.Errorf("Error deleting folder on premiumize.me: %s", err)
 			return
 		}
 

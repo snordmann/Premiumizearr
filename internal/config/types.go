@@ -51,4 +51,6 @@ type Config struct {
 	SimultaneousDownloads int `yaml:"SimultaneousDownloads" json:"SimultaneousDownloads"`
 
 	ArrHistoryUpdateIntervalSeconds int `yaml:"ArrHistoryUpdateIntervalSeconds" json:"ArrHistoryUpdateIntervalSeconds"`
+
+	PremiumizemeFolderName  string `yaml:"PremiumizemeFolderName" json:"PremiumizemeFolderName"`
 }
