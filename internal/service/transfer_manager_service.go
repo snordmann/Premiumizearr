@@ -108,7 +108,7 @@ func (manager *TransferManagerService) TaskUpdateTransfersList() {
 		log.Errorf("Error getting transfers: %s", err.Error())
 		return
 	}
-	manager.updateTransfers(transfers)
+	var foundTransfers []premiumizeme.Transfer
 
 	log.Tracef("Checking %d transfers against %d Arr clients", len(transfers), len(manager.arrsManager.GetArrs()))
 	for _, transfer := range transfers {
@@ -117,21 +117,23 @@ func (manager *TransferManagerService) TaskUpdateTransfersList() {
 			if found {
 				break
 			}
+			log.Tracef("Checking transfer %s against %s history", transfer.Name, arr.GetArrName())
+			arrID, contains := arr.HistoryContains(transfer.Name)
+			if !contains {
+				log.Tracef("%s history doesn't contain %s", arr.GetArrName(), transfer.Name)
+				continue
+			}
+			log.Tracef("Found %s in %s history", transfer.Name, arr.GetArrName())
+			found = true
+			foundTransfers = append(foundTransfers, transfer)
 			if transfer.Status == "error" {
-				log.Tracef("Checking errored transfer %s against %s history", transfer.Name, arr.GetArrName())
-				arrID, contains := arr.HistoryContains(transfer.Name)
-				if !contains {
-					log.Tracef("%s history doesn't contain %s", arr.GetArrName(), transfer.Name)
-					continue
-				}
-				log.Tracef("Found %s in %s history", transfer.Name, arr.GetArrName())
-				found = true
 				log.Debugf("Processing transfer that has errored: %s", transfer.Name)
 				go arr.HandleErrorTransfer(&transfer, arrID, manager.premiumizemeClient)
-
 			}
 		}
 	}
+
+	manager.updateTransfers(foundTransfers)
 }
 
 func (manager *TransferManagerService) TaskCheckPremiumizeDownloadsFolder() {

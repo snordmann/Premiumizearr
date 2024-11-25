@@ -10,23 +10,29 @@ BUILDDIR = build
 
 all: clean build
 
-web: deps build/web
+web: deps/web build/web
+app: deps/app build/app
 
-deps:
+deps/web:
 	cd web && npm i
-	go mod download
 
-build: deps	build/web build/app
+deps/app:
+	$(GO) mod download
+
+build: web app
 	
-build/app:
-	go build -o $(BUILDDIR)/$(SERVICE) ./cmd/$(SERVICE)
+build/app: deps/app
+	mkdir -p $(BUILDDIR)
+	$(GO) build -o $(BUILDDIR)/$(SERVICE) ./cmd/$(SERVICE) $(GOFLAGS)
+	cp init/* $(BUILDDIR)/
 
 build/web:
-	mkdir -p build
+	mkdir -p $(BUILDDIR)
 	cd web && npm run build
-	mkdir -p build/static/ && cp -r web/dist/* build/static/
-	cp init/* build/
+	mkdir -p $(BUILDDIR)/static/ && cp -r web/dist/* $(BUILDDIR)/static/
 
 clean:
 	$(RM) -rf build
 
+run:
+	cd $(BUILDDIR) && ./$(SERVICE)

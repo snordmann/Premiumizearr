@@ -58,7 +58,8 @@ func (arr *SonarrArr) HistoryContains(name string) (int64, bool) {
 	log.Tracef("Sonarr [%s]: Checking history for %s", arr.Name, name)
 	his, err := arr.GetHistory()
 	if err != nil {
-		return 0, false
+		log.Errorf("Sonarr [%s]: Failed to get history: %+v", arr.Name, err)
+		return -1, false
 	}
 	log.Tracef("Sonarr [%s]: Got History, now Locking History", arr.Name)
 	arr.HistoryMutex.Lock()
