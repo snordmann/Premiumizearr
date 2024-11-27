@@ -95,22 +95,22 @@ func GetDownloadsFolderIDFromPremiumizeme(premiumizemeClient *premiumizeme.Premi
 	var downloadsFolderID string
 	folders, err := premiumizemeClient.GetFolders()
 	if err != nil {
-		log.Errorf("Error getting folders: %s", err)
-		log.Errorf("Cannot read folders from premiumize.me, application will not run!")
+		log.Errorf("Utils: Error getting folders: %s", err)
+		log.Errorf("Utils: Cannot read folders from premiumize.me, application will not run!")
 		return ""
 	}
 
 	for _, folder := range folders {
 		if folder.Name == folderName {
 			downloadsFolderID = folder.ID
-			log.Debugf("Found downloads folder with ID: %s", folder.ID)
+			log.Debugf("Utils: Found downloads folder with ID: %s", folder.ID)
 		}
 	}
 
 	if len(downloadsFolderID) == 0 {
 		id, err := premiumizemeClient.CreateFolder(folderName)
 		if err != nil {
-			log.Errorf("Cannot create downloads folder on premiumize.me, application will not run correctly! %+v", err)
+			log.Errorf("Utils: Cannot create downloads folder on premiumize.me, application will not run correctly! %+v", err)
 		}
 		downloadsFolderID = id
 	}
@@ -141,18 +141,18 @@ func IsRunningInDockerContainer() bool {
 
 func IsDirectoryWriteable(path string) bool {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		log.Errorf("Directory does not exist: %s", path)
+		log.Errorf("Utils: Directory does not exist: %s", path)
 		return false
 	}
 
 	if _, err := os.Create(path + "/test.txt"); err != nil {
-		log.Errorf("Cannot write test.txt to directory: %s", path)
+		log.Errorf("Utils: Cannot write test.txt to directory: %s", path)
 		return false
 	}
 
 	// Delete test file
 	if err := os.Remove(path + "/test.txt"); err != nil {
-		log.Errorf("Cannot delete test.txt file in: %s", path)
+		log.Errorf("Utils: Cannot delete test.txt file in: %s", path)
 		return false
 	}
 

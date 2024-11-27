@@ -27,7 +27,7 @@ func (am *ArrsManagerService) Init(_config *config.Config) {
 
 func (am *ArrsManagerService) Start() {
 	am.arrs = []arr.IArr{}
-	log.Debugf("Starting ArrsManagerService")
+	log.Debugf("ArrsManagerService: Starting ArrsManagerService")
 	for _, arr_config := range am.config.Arrs {
 		switch arr_config.Type {
 		case config.Sonarr:
@@ -40,7 +40,7 @@ func (am *ArrsManagerService) Start() {
 				Config:     am.config,
 			}
 			am.arrs = append(am.arrs, &wrapper)
-			log.Tracef("Added Sonarr arr: %s", arr_config.Name)
+			log.Tracef("ArrsManagerService: Added Sonarr arr: %s", arr_config.Name)
 		case config.Radarr:
 			c := starr.New(arr_config.APIKey, arr_config.URL, 0)
 			wrapper := arr.RadarrArr{
@@ -51,12 +51,12 @@ func (am *ArrsManagerService) Start() {
 				Config:     am.config,
 			}
 			am.arrs = append(am.arrs, &wrapper)
-			log.Tracef("Added Radarr arr: %s", arr_config.Name)
+			log.Tracef("ArrsManagerService: Added Radarr arr: %s", arr_config.Name)
 		default:
-			log.Errorf("Unknown arr type: %s, not adding Arr %s", arr_config.Type, arr_config.Name)
+			log.Errorf("ArrsManagerService: Unknown arr type: %s, not adding Arr %s", arr_config.Type, arr_config.Name)
 		}
 	}
-	log.Debugf("Created %d Arrs", len(am.arrs))
+	log.Debugf("ArrsManagerService: Created %d Arrs", len(am.arrs))
 }
 
 func (am *ArrsManagerService) Stop() {

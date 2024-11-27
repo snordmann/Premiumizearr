@@ -35,10 +35,10 @@ func (arr *SonarrArr) GetHistory() (sonarr.History, error) {
 		arr.History = his
 		arr.LastUpdate = time.Now()
 		arr.LastUpdateCount = his.TotalRecords
-		log.Debugf("[Sonarr] [%s]: Updated history, next update in %d seconds", arr.Name, arr.Config.ArrHistoryUpdateIntervalSeconds)
+		log.Debugf("Sonarr [%s]: Updated history, next update in %d seconds", arr.Name, arr.Config.ArrHistoryUpdateIntervalSeconds)
 	}
 
-	log.Tracef("[Sonarr] [%s]: Returning from GetHistory", arr.Name)
+	log.Tracef("Sonarr [%s]: Returning from GetHistory", arr.Name)
 	return *arr.History, nil
 }
 

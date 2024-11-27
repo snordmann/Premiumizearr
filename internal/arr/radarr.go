@@ -35,10 +35,10 @@ func (arr *RadarrArr) GetHistory() (radarr.History, error) {
 		arr.History = his
 		arr.LastUpdate = time.Now()
 		arr.LastUpdateCount = his.TotalRecords
-		log.Debugf("[Radarr] [%s]: Updated history, next update in %d seconds", arr.Name, arr.Config.ArrHistoryUpdateIntervalSeconds)
+		log.Debugf("Radarr [%s]: Updated history, next update in %d seconds", arr.Name, arr.Config.ArrHistoryUpdateIntervalSeconds)
 	}
 
-	log.Tracef("[Radarr] [%s]: Returning from GetHistory", arr.Name)
+	log.Tracef("Radarr [%s]: Returning from GetHistory", arr.Name)
 	return *arr.History, nil
 }
 

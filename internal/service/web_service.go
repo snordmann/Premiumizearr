@@ -42,7 +42,7 @@ func (s *WebServerService) ConfigUpdatedCallback(currentConfig config.Config, ne
 	if currentConfig.BindIP != newConfig.BindIP ||
 		currentConfig.BindPort != newConfig.BindPort ||
 		currentConfig.WebRoot != newConfig.WebRoot {
-		log.Tracef("Config updated, restarting web server...")
+		log.Tracef("WebService: Config updated, restarting web server...")
 		s.srv.Close()
 		s.Start()
 	}
@@ -56,16 +56,16 @@ func (s *WebServerService) Init(transferManager *TransferManagerService, directo
 }
 
 func (s *WebServerService) Start() {
-	log.Info("Starting web server...")
+	log.Info("WebService: Starting web server...")
 	tmpl, err := template.ParseFiles("./static/index.html")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("WebService: %+v", err)
 	}
 
 	var ibytes bytes.Buffer
 	err = tmpl.Execute(&ibytes, &IndexTemplates{s.config.WebRoot})
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("WebService: %+v", err)
 	}
 	indexBytes = ibytes.Bytes()
 
@@ -95,7 +95,7 @@ func (s *WebServerService) Start() {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	log.Infof("Web server started on %s", address)
+	log.Infof("WebService: Web server started on %s", address)
 
 	go s.srv.ListenAndServe()
 }
